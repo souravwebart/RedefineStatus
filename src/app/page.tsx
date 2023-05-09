@@ -1,95 +1,99 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+/** @format */
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+'use client';
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+import * as React from 'react';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+import SinglePage from './singlePage';
+import Wrapper from './customComponent/wrapper';
+import Navbar from './Component/navbar';
+import { poppins } from './font';
+import Footer from './Component/footer';
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
+function MyApp() {
+	const theme = useTheme();
+	const colorMode = React.useContext(ColorModeContext);
+	return (
+		<Wrapper py={{ xs: '6px' }} mb={'100px'}>
+			<Box width='100%'>
+				<Navbar colorMode={colorMode.toggleColorMode} />
+			</Box>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+			<SinglePage />
+		</Wrapper>
+	);
+}
+
+export default function ToggleColorMode() {
+	const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+	const colorMode = React.useMemo(
+		() => ({
+			toggleColorMode: () => {
+				setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+			},
+		}),
+		[]
+	);
+
+	const theme = React.useMemo(
+		() =>
+			createTheme({
+				palette: {
+					mode,
+				},
+				breakpoints: {
+					values: {
+						xs: 0,
+						xs_sm: 288,
+						sm: 576,
+						sm_md: 672,
+						md: 768,
+						md_lg: 880,
+						lg: 992,
+						lg_xl: 1136,
+						xl: 1280,
+						xl_xxl: 1360,
+						xxl: 1440,
+						xxl_xxxl: 1600,
+					},
+				},
+				typography: {
+					allVariants: {
+						fontSmooth: 'always',
+						textRendering: 'optimizeSpeed',
+						lineHeight: 'normal',
+						letterSpacing: 'normal',
+						fontStretch: 'normal',
+						position: 'relative',
+						color: 'inherit',
+						fontSize: 'inherit',
+						...poppins.style,
+					},
+				},
+			}),
+		[mode]
+	);
+
+	return (
+		<ColorModeContext.Provider value={colorMode}>
+			<ThemeProvider theme={theme}>
+				<Box
+					sx={{
+						bgcolor: 'background.default',
+						color: 'text.primary',
+						width: '100%',
+						minHeight: '100vh',
+					}}
+				>
+					<MyApp />
+					<Footer />
+				</Box>
+			</ThemeProvider>
+		</ColorModeContext.Provider>
+	);
 }
