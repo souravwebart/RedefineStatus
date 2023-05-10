@@ -108,6 +108,7 @@ function singlePage() {
 								backgroundColor: '#fff',
 								borderRadius: '15px',
 								marginTop: '0px',
+								marginBottom: '20px',
 							}}
 							items={[
 								{
