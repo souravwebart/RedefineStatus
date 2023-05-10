@@ -27,7 +27,7 @@ const Navbar = (props: NavbarProps) => {
 	const [show, setShow] = useState(false);
 
 	const handleShow = () => {
-		setShow(true);
+		setShow(!show);
 	};
 	return (
 		<>
@@ -49,12 +49,12 @@ const Navbar = (props: NavbarProps) => {
 				</Box>
 
 				<Box sx={{ display: 'flex', alignItems: 'center' }}>
-					<Box display={{ xs: 'block', lg_xl: 'none', mr: '15px' }}>
+					<Box display={{ xs: 'block', lg_xl: 'none' }} marginRight='10px'>
 						<SearchIcon fontSize='small' onClick={handleShow} />
 					</Box>
 					<Typography fontSize={{ xs: '14px', lg_xl: '18px' }}>
 						{theme.palette.mode === 'light' ? 'Day' : 'Night'} Mode{' '}
-						<IconButton sx={{ ml: 0.8 }} onClick={colorMode} color='inherit'>
+						<IconButton sx={{ ml: '5px' }} onClick={colorMode} color='inherit'>
 							{theme.palette.mode === 'dark' ? (
 								<Brightness7Icon />
 							) : (
